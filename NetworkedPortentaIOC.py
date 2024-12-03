@@ -4,7 +4,7 @@ import struct
 import sys
 
 from datetime import datetime, timezone
-from caproto import ChannelData
+from caproto import ChannelData, ChannelType
 from caproto.server import (
     AsyncLibraryLayer,
     PVGroup,
@@ -67,14 +67,14 @@ class PortentaIOC(PVGroup):
         dtype=PvpropertyString,
     )
 
-    do0 = property(value=0, name="do0", doc="Digital output 0, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')   
-    do1 = property(value=0, name="do1", doc="Digital output 1, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
-    do2 = property(value=0, name="do2", doc="Digital output 2, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
-    do3 = property(value=0, name="do3", doc="Digital output 3, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
-    do4 = property(value=0, name="do4", doc="Digital output 4, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
-    do5 = property(value=0, name="do5", doc="Digital output 5, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
-    do6 = property(value=0, name="do6", doc="Digital output 6, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
-    do7 = property(value=0, name="do7", doc="Digital output 7, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
+    do0 = property(value=0, name="do0", doc="Digital output 0, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')   
+    do1 = property(value=0, name="do1", doc="Digital output 1, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do2 = property(value=0, name="do2", doc="Digital output 2, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do3 = property(value=0, name="do3", doc="Digital output 3, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do4 = property(value=0, name="do4", doc="Digital output 4, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do5 = property(value=0, name="do5", doc="Digital output 5, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do6 = property(value=0, name="do6", doc="Digital output 6, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do7 = property(value=0, name="do7", doc="Digital output 7, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
     @do0.putter
     async def do0(self, instance, value):
         print(f"Setting DO0 to {value}")
