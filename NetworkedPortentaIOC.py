@@ -47,10 +47,12 @@ def portenta_write(host: str, port: int, bus: str, pin: int, value: int|float):
     message = f"SET {bus} {pin} {value}\n"
     sock = connection(host, port)
     sock.sendall(message.encode('utf-8'))
-    message_received = sock.recv(1024)
+    message_received = sock.recv(1024).decode('utf-8')
     sock.close()
     if message_received != b"OK":
         print(f"Unexpected response received: {message_received}")
+    else:
+        print(f"Expected message received: {message_received}")
     # return message_received
 
 
