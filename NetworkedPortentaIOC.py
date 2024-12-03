@@ -38,7 +38,7 @@ def portenta_read(host: str, port: int, bus: str, pin: int):
     value_received = message_received.strip().split(' ')[-1]
     print(f'{message=}, {message_received=}, {value_received=}') 
     # print(f"value received: {value_received}")
-    return value_received
+    return float(value_received)
 
 def portenta_write(host: str, port: int, bus: str, pin: int, value: int|float|str):
     """
