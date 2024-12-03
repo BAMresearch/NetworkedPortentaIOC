@@ -39,11 +39,14 @@ def portenta_read(host: str, port: int, bus: str, pin: int):
     # print(f"value received: {value_received}")
     return value_received
 
-def portenta_write(host: str, port: int, bus: str, pin: int, value: int|float):
+def portenta_write(host: str, port: int, bus: str, pin: int, value: int|float|str):
     """
     Communicates with the Arduino PMC
     """
 
+    if isinstance(value, str):
+        # assuming bool
+        value = 1 if value in ['On', 'ON', 'on', '1', 'True', 'true'] else 0
     message = f"SET {bus} {pin} {value}\n"
     sock = connection(host, port)
     print(f"Sending: {message}")
