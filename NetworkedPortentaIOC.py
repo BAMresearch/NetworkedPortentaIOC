@@ -36,7 +36,7 @@ def portenta_read(host: str, port: int, bus: str, pin: int):
     sock.close()
     print(f"Received: {message_received}")
     value_received = message_received.strip().split(' ')[-1]
-    print(f"value received: {value_received}")
+    # print(f"value received: {value_received}")
     return value_received
 
 def portenta_write(host: str, port: int, bus: str, pin: int, value: int|float):
