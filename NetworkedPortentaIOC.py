@@ -79,49 +79,50 @@ class PortentaIOC(PVGroup):
     async def do0(self, instance, value):
         print(f"Setting do0 to {value}")
         portenta_write(self.address, self.port, "DO", 0, value)
-        await self.do0.write(value)
+        # await self.do0.write(value)
     @do1.putter
     async def do1(self, instance, value):
         print(f"Setting do1 to {value}")
         portenta_write(self.address, self.port, "DO", 1, value)
-        await self.do1.write(value)
+        # await self.do1.write(value)
     @do2.putter
     async def do2(self, instance, value):
         print(f"Setting do2 to {value}")
         portenta_write(self.address, self.port, "DO", 2, value)
-        await self.do2.write(value)
+        # await self.do2.write(value)
     @do3.putter
     async def do3(self, instance, value):
         print(f"Setting do3 to {value}")
         portenta_write(self.address, self.port, "DO", 3, value)
-        await self.do3.write(value)
+        # await self.do3.write(value)
     @do4.putter
     async def do4(self, instance, value):
         print(f"Setting do4 to {value}")
         portenta_write(self.address, self.port, "DO", 4, value)
-        await self.do4.write(value)
+        # await self.do4.write(value)
     @do5.putter
     async def do5(self, instance, value):
         print(f"Setting do5 to {value}")
         portenta_write(self.address, self.port, "DO", 5, value)
-        await self.do5.write(value)
+        # await self.do5.write(value)
     @do6.putter
     async def do6(self, instance, value):
         print(f"Setting do6 to {value}")
         portenta_write(self.address, self.port, "DO", 6, value)
-        await self.do6.write(value)
+        # await self.do6.write(value)
     @do7.putter
     async def do7(self, instance, value):
         print(f"Setting do7 to {value}")
         portenta_write(self.address, self.port, "DO", 7, value)
-        await self.do7.write(value)
+        # await self.do7.write(value)
 
-    update_hook = pvproperty(value=0, name="update_hook", doc="Update hook for the IOC", read_only=True)
+    update_hook = pvproperty(value=5.0, name="update_hook", doc="Update hook for the IOC", read_only=True)
+
     @update_hook.scan(period=10)
     async def update_hook(self, instance, async_lib):
         for DOPort in range(8):
-            message = portenta_read(self.address, self.port, "DO", DOPort)
-            await getattr(self, f"do{DOPort}").write(message)
+            value = portenta_read(self.address, self.port, "DO", DOPort)
+            await getattr(self, f"do{DOPort}").write(value)
 
     # @pressure.scan(period=6)
     # async def pressure(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
