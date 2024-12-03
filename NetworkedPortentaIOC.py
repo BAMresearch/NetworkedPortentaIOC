@@ -240,7 +240,7 @@ class PortentaIOC(PVGroup):
             value = portenta_read(self.host, self.port, "DIO", DIPort)
             await getattr(self, f"dio{DIOPort}_RBV").write(value)
 
-    update_hook = pvproperty(value=0, name="update_hook", doc="Update hook for the IOC", record = 'bi', read_only=True)
+    update_hook = pvproperty(value=0, name="update_hook", doc="Update hook for the IOC", record = 'ai', read_only=True)
     
     # The .SCAN field should allow you to set a scan rate: caput Portenta:update_hook.SCAN '.5 second' for example
     @update_hook.scan(period=10, use_scan_field=True)
