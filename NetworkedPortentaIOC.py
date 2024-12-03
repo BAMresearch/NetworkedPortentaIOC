@@ -21,8 +21,8 @@ def portenta_read(address: str, port: int, bus: str, pin: int):
 
     message = f"GET {bus} {pin}\n"
     sock = connection(address, port)
-    sock.sendall(message)
-    message_received = sock.recv(1024)
+    sock.sendall(message.encode('utf-8'))
+    message_received = sock.recv(1024).decode('utf-8')
     sock.close()
     print(f"Received: {message_received}")
     value_received = message_received.strip().split(' ')[-1]
@@ -36,7 +36,7 @@ def portenta_write(address: str, port: int, bus: str, pin: int, value: int|float
 
     message = f"SET {bus} {pin} {value}\n"
     sock = connection(address, port)
-    sock.sendall(message)
+    sock.sendall(message.encode('utf-8'))
     message_received = sock.recv(1024)
     sock.close()
     if message_received != b"OK":
