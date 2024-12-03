@@ -31,12 +31,12 @@ def portenta_read(host: str, port: int, bus: str, pin: int):
 
     message = f"GET {bus} {pin}\n"
     sock = connection(host, port)
-    print(f'{message=}') 
     sock.sendall(message.encode('utf-8'))
     message_received = sock.recv(1024).decode('utf-8')
     sock.close()
     # print(f"Received: {message_received}")
     value_received = message_received.strip().split(' ')[-1]
+    print(f'{message=}, {message_received=}, {value_received=}') 
     # print(f"value received: {value_received}")
     return value_received
 
@@ -234,7 +234,7 @@ class PortentaIOC(PVGroup):
         for DIPort in range(8):
             value = portenta_read(self.host, self.port, "DI", DIPort)
             await getattr(self, f"do{DIPort}_RBV").write(value)
-        for AIPort in range(3):
+        for AIPort in range(4):
             value = portenta_read(self.host, self.port, "AI", AIPort)
             await getattr(self, f"do{AIPort}_RBV").write(value)
         for DIOPort in range(8):
