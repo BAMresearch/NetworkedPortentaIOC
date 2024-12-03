@@ -2,7 +2,7 @@ import logging
 import socket
 import struct
 import sys
-
+import attrs
 from datetime import datetime, timezone
 from caproto import ChannelData, ChannelType
 from caproto.server import (
@@ -14,13 +14,23 @@ from caproto.server import (
     template_arg_parser,
 )
 
-def portenta_read(address: str, port: int, bus: str, pin: int):
+def validate_ip_address(instance, attribute, value):
+    try:
+        socket.inet_aton(value)
+    except socket.error:
+        raise ValueError(f"Invalid IP address: {value}")
+
+def validate_port_number(instance, attribute, value):
+    if not (0 <= value <= 65535):
+        raise ValueError(f"Port number must be between 0 and 65535, got {value}")
+
+def portenta_read(host: str, port: int, bus: str, pin: int):
     """
     Communicates with the Arduino PMC
     """
 
     message = f"GET {bus} {pin}\n"
-    sock = connection(address, port)
+    sock = connection(host, port)
     sock.sendall(message.encode('utf-8'))
     message_received = sock.recv(1024).decode('utf-8')
     sock.close()
@@ -29,13 +39,13 @@ def portenta_read(address: str, port: int, bus: str, pin: int):
     print(f"value received: {value_received}")
     return value_received
 
-def portenta_write(address: str, port: int, bus: str, pin: int, value: int|float):
+def portenta_write(host: str, port: int, bus: str, pin: int, value: int|float):
     """
     Communicates with the Arduino PMC
     """
 
     message = f"SET {bus} {pin} {value}\n"
-    sock = connection(address, port)
+    sock = connection(host, port)
     sock.sendall(message.encode('utf-8'))
     message_received = sock.recv(1024)
     sock.close()
@@ -44,28 +54,21 @@ def portenta_write(address: str, port: int, bus: str, pin: int, value: int|float
     # return message_received
 
 
-def connection(address, port):
+def connection(host, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((address, port))
+    sock.connect((host, port))
     return sock
 
-
+@attrs.define
 class PortentaIOC(PVGroup):
     """
     A group of PVs regarding reading the pressure.
     """
+    # IP address of the board
+    host: str = attrs.field(default = "192.168.2.114", validator=validate_ip_address, converter=str)
 
-    def __init__(self, address, port, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.address: str = address
-        self.port: str = port
-
-    timestamp = pvproperty(
-        value=str(datetime.now(timezone.utc).isoformat()),
-        name="timestamp",
-        doc="Timestamp of portenta readout",
-        dtype=PvpropertyString,
-    )
+    # Port number for communication
+    port: int = attrs.field(default = 502, validator=validate_port_number, converter=int)
 
     do0 = pvproperty(name="do0", doc="Digital output 0, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')   
     do1 = pvproperty(name="do1", doc="Digital output 1, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
@@ -75,60 +78,78 @@ class PortentaIOC(PVGroup):
     do5 = pvproperty(name="do5", doc="Digital output 5, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
     do6 = pvproperty(name="do6", doc="Digital output 6, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
     do7 = pvproperty(name="do7", doc="Digital output 7, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+
+    def __init__(self, *args, **kwargs) -> None:
+        for k in list(kwargs.keys()):
+            if k in ['host', 'port']:
+                setattr(self, k, kwargs.pop(k))
+        super().__init__(*args, **kwargs)
+
+    timestamp = pvproperty(
+        value=str(datetime.now(timezone.utc).isoformat()),
+        name="timestamp",
+        doc="Timestamp of portenta readout",
+        dtype=PvpropertyString,
+    )
+
     @do0.putter
     async def do0(self, instance, value):
         print(f"Setting do0 to {value}")
-        portenta_write(self.address, self.port, "DO", 0, value)
+        portenta_write(self.host, self.port, "DO", 0, value)
         # await self.do0.write(value)
     @do1.putter
     async def do1(self, instance, value):
         print(f"Setting do1 to {value}")
-        portenta_write(self.address, self.port, "DO", 1, value)
+        portenta_write(self.host, self.port, "DO", 1, value)
         # await self.do1.write(value)
     @do2.putter
     async def do2(self, instance, value):
         print(f"Setting do2 to {value}")
-        portenta_write(self.address, self.port, "DO", 2, value)
+        portenta_write(self.host, self.port, "DO", 2, value)
         # await self.do2.write(value)
     @do3.putter
     async def do3(self, instance, value):
         print(f"Setting do3 to {value}")
-        portenta_write(self.address, self.port, "DO", 3, value)
+        portenta_write(self.host, self.port, "DO", 3, value)
         # await self.do3.write(value)
     @do4.putter
     async def do4(self, instance, value):
         print(f"Setting do4 to {value}")
-        portenta_write(self.address, self.port, "DO", 4, value)
+        portenta_write(self.host, self.port, "DO", 4, value)
         # await self.do4.write(value)
     @do5.putter
     async def do5(self, instance, value):
         print(f"Setting do5 to {value}")
-        portenta_write(self.address, self.port, "DO", 5, value)
+        portenta_write(self.host, self.port, "DO", 5, value)
         # await self.do5.write(value)
     @do6.putter
     async def do6(self, instance, value):
         print(f"Setting do6 to {value}")
-        portenta_write(self.address, self.port, "DO", 6, value)
+        portenta_write(self.host, self.port, "DO", 6, value)
         # await self.do6.write(value)
     @do7.putter
     async def do7(self, instance, value):
         print(f"Setting do7 to {value}")
-        portenta_write(self.address, self.port, "DO", 7, value)
+        portenta_write(self.host, self.port, "DO", 7, value)
         # await self.do7.write(value)
 
-    update_hook = pvproperty(value=5.0, name="update_hook", doc="Update hook for the IOC", read_only=True)
+    async def update_pin_status(self):
+        for DOPort in range(8):
+            value = portenta_read(self.host, self.port, "DO", DOPort)
+            await getattr(self, f"do{DOPort}").write(value)
 
+    update_hook = pvproperty(value=5.0, name="update_hook", doc="Update hook for the IOC", read_only=True)
     @update_hook.scan(period=10)
     async def update_hook(self, instance, async_lib):
-        for DOPort in range(8):
-            value = portenta_read(self.address, self.port, "DO", DOPort)
-            await getattr(self, f"do{DOPort}").write(value)
+        await self.timestamp.write(datetime.now(timezone.utc).isoformat())
+        await self.update_pin_status()
+
 
     # @pressure.scan(period=6)
     # async def pressure(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
-    #     address = self.address
+    #     host = self.host
     #     port = self.port
-    #     await self.pressure.write(portenta_read(address, port))
+    #     await self.pressure.write(portenta_read(host, port))
     #     await self.timestamp.write(datetime.now(timezone.utc).isoformat())
 
 
@@ -154,7 +175,7 @@ def main(args=None):
     logging.info("Running Networked Portenta IOC")
 
     ioc_options, run_options = split_args(args)
-    ioc = PortentaIOC(address=args.host, port=args.port, **ioc_options)
+    ioc = PortentaIOC(host=args.host, port=args.port, **ioc_options)
     run(ioc.pvdb, **run_options)
 
 
