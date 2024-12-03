@@ -31,7 +31,7 @@ def portenta_read(host: str, port: int, bus: str, pin: int):
 
     message = f"GET {bus} {pin}\n"
     sock = connection(host, port)
-    print(f'{message=}')
+    print(f'{message=}') 
     sock.sendall(message.encode('utf-8'))
     message_received = sock.recv(1024).decode('utf-8')
     sock.close()
