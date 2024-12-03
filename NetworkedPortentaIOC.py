@@ -16,7 +16,7 @@ from caproto.server import (
 
 def portenta_read(address: str, port: int, bus: str, pin: int):
     """
-    Communicates with the pressure guage
+    Communicates with the Arduino PMC
     """
 
     message = f"GET {bus} {pin}\n"
@@ -24,8 +24,25 @@ def portenta_read(address: str, port: int, bus: str, pin: int):
     sock.sendall(message)
     message_received = sock.recv(1024)
     sock.close()
-
+    print(f"Received: {message_received}")
+    value_received = message_received.strip().split(' ')[-1]
+    print(f"value received: {value_received}")
     return message_received
+
+def portenta_write(address: str, port: int, bus: str, pin: int, value: int|float):
+    """
+    Communicates with the Arduino PMC
+    """
+
+    message = f"SET {bus} {pin} {value}\n"
+    sock = connection(address, port)
+    sock.sendall(message)
+    message_received = sock.recv(1024)
+    sock.close()
+    if message_received != b"OK":
+        print(f"Unexpected response received: {message_received}")
+    return message_received
+
 
 def connection(address, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -42,21 +59,6 @@ class PortentaIOC(PVGroup):
         super().__init__(*args, **kwargs)
         self.address: str = address
         self.port: str = port
-        for DOPort in range(8):
-            tempattr = pvproperty(
-                value=0,
-                name="do{DOPort}",
-                doc=f"Digital output {DOPort}, can be 'Low' or 'High'",
-                record='bo',
-                enum_strings=['Low', 'High']
-            )
-
-            @tempattr.putter
-            async def tempattr(self, instance, value):
-                print(f"Setting DO{DOPort} to {value}")
-                await instance.write(value)
-
-            setattr(self, f"do{DOPort}", tempattr)
 
     timestamp = pvproperty(
         value=str(datetime.now(timezone.utc).isoformat()),
@@ -64,6 +66,62 @@ class PortentaIOC(PVGroup):
         doc="Timestamp of portenta readout",
         dtype=PvpropertyString,
     )
+
+    do0 = property(value=0, name="do0", doc="Digital output 0, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')   
+    do1 = property(value=0, name="do1", doc="Digital output 1, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
+    do2 = property(value=0, name="do2", doc="Digital output 2, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
+    do3 = property(value=0, name="do3", doc="Digital output 3, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
+    do4 = property(value=0, name="do4", doc="Digital output 4, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
+    do5 = property(value=0, name="do5", doc="Digital output 5, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
+    do6 = property(value=0, name="do6", doc="Digital output 6, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
+    do7 = property(value=0, name="do7", doc="Digital output 7, can be 'Low' or 'High'", enum_strings=['Low', 'High'], record='bo')
+    @do0.putter
+    async def do0(self, instance, value):
+        print(f"Setting DO0 to {value}")
+        portenta_write(self.address, self.port, "DO", 0, value)
+        await instance.write(value)
+    @do1.putter
+    async def do1(self, instance, value):
+        print(f"Setting DO1 to {value}")
+        portenta_write(self.address, self.port, "DO", 1, value)
+        await instance.write(value)
+    @do2.putter
+    async def do2(self, instance, value):
+        print(f"Setting DO2 to {value}")
+        portenta_write(self.address, self.port, "DO", 2, value)
+        await instance.write(value)
+    @do3.putter
+    async def do3(self, instance, value):
+        print(f"Setting DO3 to {value}")
+        portenta_write(self.address, self.port, "DO", 3, value)
+        await instance.write(value)
+    @do4.putter
+    async def do4(self, instance, value):
+        print(f"Setting DO4 to {value}")
+        portenta_write(self.address, self.port, "DO", 4, value)
+        await instance.write(value)
+    @do5.putter
+    async def do5(self, instance, value):
+        print(f"Setting DO5 to {value}")
+        portenta_write(self.address, self.port, "DO", 5, value)
+        await instance.write(value)
+    @do6.putter
+    async def do6(self, instance, value):
+        print(f"Setting DO6 to {value}")
+        portenta_write(self.address, self.port, "DO", 6, value)
+        await instance.write(value)
+    @do7.putter
+    async def do7(self, instance, value):
+        print(f"Setting DO7 to {value}")
+        portenta_write(self.address, self.port, "DO", 7, value)
+        await instance.write(value)
+
+    update_hook = pvproperty(value=0, name="update_hook", doc="Update hook for the IOC", read_only=True)
+    @update_hook.scan(period=10)
+    async def update_hook(self, instance):
+        for DOPort in range(8):
+            message = portenta_read(self.address, self.port, "DO", DOPort)
+            await getattr(self, f"do{DOPort}").write(int(message))
 
     # @pressure.scan(period=6)
     # async def pressure(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
