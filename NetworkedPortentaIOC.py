@@ -78,6 +78,14 @@ class PortentaIOC(PVGroup):
     do5 = pvproperty(name="do5", doc="Digital output 5, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
     do6 = pvproperty(name="do6", doc="Digital output 6, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
     do7 = pvproperty(name="do7", doc="Digital output 7, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do0_RBV = pvproperty(name="do0_RBV", doc="Digital output 0 readback value, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')   
+    do1_RBV = pvproperty(name="do1_RBV", doc="Digital output 1 readback value, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do2_RBV = pvproperty(name="do2_RBV", doc="Digital output 2 readback value, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do3_RBV = pvproperty(name="do3_RBV", doc="Digital output 3 readback value, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do4_RBV = pvproperty(name="do4_RBV", doc="Digital output 4 readback value, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do5_RBV = pvproperty(name="do5_RBV", doc="Digital output 5 readback value, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do6_RBV = pvproperty(name="do6_RBV", doc="Digital output 6 readback value, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
+    do7_RBV = pvproperty(name="do7_RBV", doc="Digital output 7 readback value, can be 'Low' or 'High'", enum_strings=['Low', 'High'], dtype=ChannelType.ENUM, record='bo')
 
     def __init__(self, *args, **kwargs) -> None:
         for k in list(kwargs.keys()):
@@ -136,7 +144,7 @@ class PortentaIOC(PVGroup):
     async def update_pin_status(self):
         for DOPort in range(8):
             value = portenta_read(self.host, self.port, "DO", DOPort)
-            await getattr(self, f"do{DOPort}").write(value)
+            await getattr(self, f"do{DOPort}_RBV").write(value)
 
     update_hook = pvproperty(value=5.0, name="update_hook", doc="Update hook for the IOC", read_only=True)
     @update_hook.scan(period=10)
