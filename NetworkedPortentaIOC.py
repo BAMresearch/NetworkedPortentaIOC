@@ -14,6 +14,11 @@ from caproto.server import (
     template_arg_parser,
 )
 
+import logging
+
+logger = logging.getLogger("PortentaIOC")
+logger.setLevel(logging.INFO)
+
 def validate_ip_address(instance, attribute, value):
     try:
         socket.inet_aton(value)
@@ -34,10 +39,8 @@ def portenta_read(host: str, port: int, bus: str, pin: int):
     sock.sendall(message.encode('utf-8'))
     message_received = sock.recv(1024).decode('utf-8')
     sock.close()
-    # print(f"Received: {message_received}")
     value_received = message_received.strip().split(' ')[-1]
-    print(f'{message=}, {message_received=}, {value_received=}') 
-    # print(f"value received: {value_received}")
+    logger.info(f'{message=}, {message_received=}, {value_received=}') 
     return float(value_received)
 
 def portenta_write(host: str, port: int, bus: str, pin: int, value: int|float|str):
@@ -50,14 +53,14 @@ def portenta_write(host: str, port: int, bus: str, pin: int, value: int|float|st
         value = 1 if value in ['On', 'ON', 'on', '1', 'True', 'true'] else 0
     message = f"SET {bus} {pin} {value}\n"
     sock = connection(host, port)
-    print(f"Sending: {message}")
+    logger.info(f"Sending: {message}")
     sock.sendall(message.encode('utf-8'))
     message_received = sock.recv(1024).decode('utf-8')
     sock.close()
     if message_received != "OK":
-        print(f"Unexpected response received: {message_received}")
+        logger.info(f"Unexpected response received: {message_received}")
     else:
-        print(f"Expected message received: {message_received}")
+        logger.info(f"Expected message received: {message_received}")
     # return message_received
 
 
@@ -145,85 +148,85 @@ class PortentaIOC(PVGroup):
 
     @do0.putter
     async def do0(self, instance, value):
-        print(f"Setting do0 to {value}")
+        logger.info(f"Setting do0 to {value}")
         portenta_write(self.host, self.port, "DO", 0, value)
     @do1.putter
     async def do1(self, instance, value):
-        print(f"Setting do1 to {value}")
+        logger.info(f"Setting do1 to {value}")
         portenta_write(self.host, self.port, "DO", 1, value)
     @do2.putter
     async def do2(self, instance, value):
-        print(f"Setting do2 to {value}")
+        logger.info(f"Setting do2 to {value}")
         portenta_write(self.host, self.port, "DO", 2, value)
     @do3.putter
     async def do3(self, instance, value):
-        print(f"Setting do3 to {value}")
+        logger.info(f"Setting do3 to {value}")
         portenta_write(self.host, self.port, "DO", 3, value)
     @do4.putter
     async def do4(self, instance, value):
-        print(f"Setting do4 to {value}")
+        logger.info(f"Setting do4 to {value}")
         portenta_write(self.host, self.port, "DO", 4, value)
     @do5.putter
     async def do5(self, instance, value):
-        print(f"Setting do5 to {value}")
+        logger.info(f"Setting do5 to {value}")
         portenta_write(self.host, self.port, "DO", 5, value)
     @do6.putter
     async def do6(self, instance, value):
-        print(f"Setting do6 to {value}")
+        logger.info(f"Setting do6 to {value}")
         portenta_write(self.host, self.port, "DO", 6, value)
     @do7.putter
     async def do7(self, instance, value):
-        print(f"Setting do7 to {value}")
+        logger.info(f"Setting do7 to {value}")
         portenta_write(self.host, self.port, "DO", 7, value)
 
     @ao0.putter
     async def ao0(self, instance, value):
-        print(f"Setting ao0 to {value}")
+        logger.info(f"Setting ao0 to {value}")
         portenta_write(self.host, self.port, "AO", 0, value)
     @ao1.putter
     async def ao1(self, instance, value):
-        print(f"Setting ao1 to {value}")
+        logger.info(f"Setting ao1 to {value}")
         portenta_write(self.host, self.port, "AO", 1, value)
     @ao2.putter
     async def ao2(self, instance, value):
-        print(f"Setting ao2 to {value}")
+        logger.info(f"Setting ao2 to {value}")
         portenta_write(self.host, self.port, "AO", 2, value)
     @ao3.putter
     async def ao3(self, instance, value):
-        print(f"Setting ao3 to {value}")
+        logger.info(f"Setting ao3 to {value}")
         portenta_write(self.host, self.port, "AO", 3, value)
 
     @dio0.putter
     async def dio0(self, instance, value):
-        print(f"Setting dio0 to {value}")
+        logger.info(f"Setting dio0 to {value}")
         portenta_write(self.host, self.port, "DIO", 0, value)
     @dio1.putter
     async def dio1(self, instance, value):
-        print(f"Setting dio1 to {value}")
+        logger.info(f"Setting dio1 to {value}")
         portenta_write(self.host, self.port, "DIO", 1, value)
     @dio2.putter
     async def dio2(self, instance, value):
-        print(f"Setting dio2 to {value}")
+        logger.info(f"Setting dio2 to {value}")
         portenta_write(self.host, self.port, "DIO", 2, value)
     @dio3.putter
     async def dio3(self, instance, value):
-        print(f"Setting dio3 to {value}")
+        logger.info(f"Setting dio3 to {value}")
         portenta_write(self.host, self.port, "DIO", 3, value)
     @dio4.putter
     async def dio4(self, instance, value):
-        print(f"Setting dio4 to {value}")
+        logger.info(f"Setting dio4 to {value}")
         portenta_write(self.host, self.port, "DIO", 4, value)
     @dio5.putter
     async def dio5(self, instance, value):
-        print(f"Setting dio5 to {value}")
+        logger.info(f"Setting dio5 to {value}")
         portenta_write(self.host, self.port, "DIO", 5, value)
     @dio6.putter
     async def dio6(self, instance, value):
-        print(f"Setting dio6 to {value}")
+        logger.info(f"Setting dio6 to {value}")
         portenta_write(self.host, self.port, "DIO", 6, value)
     @dio7.putter
     async def dio7(self, instance, value):
-        print(f"Setting dio7 to {value}")
+        logger.info(f"Setting dio7 to {value}")
         portenta_write(self.host, self.port, "DIO", 7, value)
 
 
