@@ -47,7 +47,7 @@ class PortentaClient:
         if isinstance(value, str):
             value = 1 if value.lower() in {'on', '1', 'true'} else 0
         message = f"SET {bus} {pin} {value}\n"
-        logger.debug(f"Writing message: {message}")
+        logger.info(f"Writing message: {message}")
         with self._connect() as sock:
             sock.sendall(message.encode('utf-8'))
             response = sock.recv(1024).decode('utf-8')
