@@ -241,28 +241,25 @@ class PortentaIOC(PVGroup):
     @ao0.putter
     async def ao0(self, instance, value: float):
         self.client.write("AO", 0, value)
-
-    @ao0.scan(period=6, use_scan_field=True)
-    async def ao0(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
-        await self.ao0.write(self.client.read("AO", 0))
+    # @ao0.scan(period=6, use_scan_field=True)
+    # async def ao0(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+    #     await self.ao0.write(self.client.read("AO", 0))
 
     ao1 = pvproperty(name="ao1", doc="Analog output 1, can be 0-10V", dtype=float, record='ai')
     @ao1.putter
     async def ao1(self, instance, value: float):
         self.client.write("AO", 1, value)
-
-    @ao1.scan(period=6, use_scan_field=True)
-    async def ao1(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
-        await self.ao1.write(self.client.read("AO", 1))
+    # @ao1.scan(period=6, use_scan_field=True)
+    # async def ao1(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+    #     await self.ao1.write(self.client.read("AO", 1))
 
     ao2 = pvproperty(name="ao2", doc="Analog output 2, can be 0-10V", dtype=float, record='ai')
     @ao2.putter
     async def ao2(self, instance, value: float):
         self.client.write("AO", 2, value)
-
-    @ao2.scan(period=6, use_scan_field=True)
-    async def ao2(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
-        await self.ao2.write(self.client.read("AO", 2))
+    # @ao2.scan(period=6, use_scan_field=True)
+    # async def ao2(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+    #     await self.ao2.write(self.client.read("AO", 2))
 
     ao3 = pvproperty(name="ao3", doc="Analog output 3, can be 0-10V", dtype=float, record='ai')
     @ao3.putter
