@@ -75,7 +75,7 @@ class PortentaIOC(PVGroup):
         self.client.write("DO", 0, value)
     @do0.scan(period=6, use_scan_field=True)
     async def do0(self, instance:ChannelData, async_lib: AsyncLibraryLayer):
-        self.do0.write(self.client.read("DO", 0))
+        await self.do0.write(self.client.read("DO", 0))
     # do1 = pvproperty(name="do1", doc="Digital output 1, can be 0 or 1", dtype=bool, record='bi')
     # do2 = pvproperty(name="do2", doc="Digital output 2, can be 0 or 1", dtype=bool, record='bi')
     # do3 = pvproperty(name="do3", doc="Digital output 3, can be 0 or 1", dtype=bool, record='bi')
