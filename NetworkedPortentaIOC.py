@@ -2,9 +2,9 @@ import logging
 import socket
 import struct
 import sys
-import attrs
 from datetime import datetime, timezone
-from caproto import ChannelData, ChannelType
+
+import attrs
 from caproto.server import (
     AsyncLibraryLayer,
     PVGroup,
