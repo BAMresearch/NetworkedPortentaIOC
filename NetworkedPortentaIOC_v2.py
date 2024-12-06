@@ -237,6 +237,55 @@ class PortentaIOC(PVGroup):
     async def di7(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
         await self.di7.write(self.client.read("DI", 7))
 
+    ao0 = pvproperty(name="ao0", doc="Analog output 0, can be 0-10V", dtype=float, record='ai')
+    @ao0.putter
+    async def ao0(self, instance, value: float):
+        self.client.write("AO", 0, value)
+
+    ao1 = pvproperty(name="ao1", doc="Analog output 1, can be 0-10V", dtype=float, record='ai')
+    @ao1.putter
+    async def ao1(self, instance, value: float):
+        self.client.write("AO", 1, value)
+
+    ao2 = pvproperty(name="ao2", doc="Analog output 2, can be 0-10V", dtype=float, record='ai')
+    @ao2.putter
+    async def ao2(self, instance, value: float):
+        self.client.write("AO", 2, value)
+
+    ao3 = pvproperty(name="ao3", doc="Analog output 3, can be 0-10V", dtype=float, record='ai')
+    @ao3.putter
+    async def ao3(self, instance, value: float):
+        self.client.write("AO", 3, value)
+
+    ai0_RBV = pvproperty(name="ai0_RBV", doc="Analog input 0 readback value, can be 0-10V", dtype=float, record='ao')
+    @ai0_RBV.scan(period=6, use_scan_field=True)
+    async def ai0_RBV(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.ai0_RBV.write(self.client.read("AI", 0))
+
+    ai1_RBV = pvproperty(name="ai1_RBV", doc="Analog input 1 readback value, can be 0-10V", dtype=float, record='ao')
+    @ai1_RBV.scan(period=6, use_scan_field=True)
+    async def ai1_RBV(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.ai1_RBV.write(self.client.read("AI", 1))
+
+    ai2_RBV = pvproperty(name="ai2_RBV", doc="Analog input 2 readback value, can be 0-10V", dtype=float, record='ao')
+    @ai2_RBV.scan(period=6, use_scan_field=True)
+    async def ai2_RBV(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.ai2_RBV.write(self.client.read("AI", 2))
+
+    t0_RBV = pvproperty(name="t0_RBV", doc="Temperature sensor 0 (degrees C)", dtype=float, record='ao')
+    @t0_RBV.scan(period=6, use_scan_field=True)
+    async def t0_RBV(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.t0_RBV.write(self.client.read("SENSOR temp", 0))
+
+    t1_RBV = pvproperty(name="t1_RBV", doc="Temperature sensor 1 (degrees C)", dtype=float, record='ao')
+    @t1_RBV.scan(period=6, use_scan_field=True)
+    async def t1_RBV(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.t1_RBV.write(self.client.read("SENSOR temp", 1))
+
+    t2_RBV = pvproperty(name="t2_RBV", doc="Temperature sensor 2 (degrees C)", dtype=float, record='ao')
+    @t2_RBV.scan(period=6, use_scan_field=True)
+    async def t2_RBV(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.t2_RBV.write(self.client.read("SENSOR temp", 2))
 
     # # bidirectional digital pins (input/output) ("DIO")
     # dio0 = pvproperty(name="dio0", doc="Digital i/o 0, can be 0 or 1", dtype=bool, record='bi')   
