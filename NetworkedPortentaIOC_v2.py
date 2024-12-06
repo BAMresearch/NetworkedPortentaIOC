@@ -291,17 +291,17 @@ class PortentaIOC(PVGroup):
     t0 = pvproperty(name="t0", doc="Temperature sensor 0 (degrees C)", dtype=float, record='ao')
     @t0.scan(period=6, use_scan_field=True)
     async def t0(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
-        await self.t0.write(self.client.read("TEMP", 0))
+        await self.t0.write(self.client.read("SENSOR temp", 0))
 
     t1 = pvproperty(name="t1", doc="Temperature sensor 1 (degrees C)", dtype=float, record='ao')
     @t1.scan(period=6, use_scan_field=True)
     async def t1(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
-        await self.t1.write(self.client.read("TEMP", 1))
+        await self.t1.write(self.client.read("SENSOR temp", 1))
 
     t2 = pvproperty(name="t2", doc="Temperature sensor 2 (degrees C)", dtype=float, record='ao')
     @t2.scan(period=6, use_scan_field=True)
     async def t2(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
-        await self.t2.write(self.client.read("TEMP", 2))
+        await self.t2.write(self.client.read("SENSOR temp", 2))
 
 
 def main(args=None):
