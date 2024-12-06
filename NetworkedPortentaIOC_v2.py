@@ -76,21 +76,167 @@ class PortentaIOC(PVGroup):
     @do0.scan(period=6, use_scan_field=True)
     async def do0(self, instance:ChannelData, async_lib: AsyncLibraryLayer):
         await self.do0.write(self.client.read("DO", 0))
-    # do1 = pvproperty(name="do1", doc="Digital output 1, can be 0 or 1", dtype=bool, record='bi')
-    # do2 = pvproperty(name="do2", doc="Digital output 2, can be 0 or 1", dtype=bool, record='bi')
-    # do3 = pvproperty(name="do3", doc="Digital output 3, can be 0 or 1", dtype=bool, record='bi')
-    # do4 = pvproperty(name="do4", doc="Digital output 4, can be 0 or 1", dtype=bool, record='bi')
-    # do5 = pvproperty(name="do5", doc="Digital output 5, can be 0 or 1", dtype=bool, record='bi')
-    # do6 = pvproperty(name="do6", doc="Digital output 6, can be 0 or 1", dtype=bool, record='bi')
-    # do7 = pvproperty(name="do7", doc="Digital output 7, can be 0 or 1", dtype=bool, record='bi')
-    # do0_RBV = pvproperty(name="do0_RBV", doc="Digital output 0 readback value, can be 0 or 1", dtype=bool, record='bo')   
-    # do1_RBV = pvproperty(name="do1_RBV", doc="Digital output 1 readback value, can be 0 or 1", dtype=bool, record='bo')
-    # do2_RBV = pvproperty(name="do2_RBV", doc="Digital output 2 readback value, can be 0 or 1", dtype=bool, record='bo')
-    # do3_RBV = pvproperty(name="do3_RBV", doc="Digital output 3 readback value, can be 0 or 1", dtype=bool, record='bo')
-    # do4_RBV = pvproperty(name="do4_RBV", doc="Digital output 4 readback value, can be 0 or 1", dtype=bool, record='bo')
-    # do5_RBV = pvproperty(name="do5_RBV", doc="Digital output 5 readback value, can be 0 or 1", dtype=bool, record='bo')
-    # do6_RBV = pvproperty(name="do6_RBV", doc="Digital output 6 readback value, can be 0 or 1", dtype=bool, record='bo')
-    # do7_RBV = pvproperty(name="do7_RBV", doc="Digital output 7 readback value, can be 0 or 1", dtype=bool, record='bo')
+
+    do1 = pvproperty(name="do1", doc="Digital output 1, can be 0 or 1", dtype=bool, record='bi')   
+    @do1.putter
+    async def do1(self, instance, value: bool):
+        self.client.write("DO", 1, value)
+    @do1.scan(period=6, use_scan_field=True)
+    async def do1(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.do1.write(self.client.read("DO", 1))
+
+    do2 = pvproperty(name="do2", doc="Digital output 2, can be 0 or 1", dtype=bool, record='bi')   
+    @do2.putter
+    async def do2(self, instance, value: bool):
+        self.client.write("DO", 2, value)
+    @do2.scan(period=6, use_scan_field=True)
+    async def do2(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.do2.write(self.client.read("DO", 2))
+
+    do3 = pvproperty(name="do3", doc="Digital output 3, can be 0 or 1", dtype=bool, record='bi')   
+    @do3.putter
+    async def do3(self, instance, value: bool):
+        self.client.write("DO", 3, value)
+    @do3.scan(period=6, use_scan_field=True)
+    async def do3(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.do3.write(self.client.read("DO", 3))
+
+    do4 = pvproperty(name="do4", doc="Digital output 4, can be 0 or 1", dtype=bool, record='bi')   
+    @do4.putter
+    async def do4(self, instance, value: bool):
+        self.client.write("DO", 4, value)
+    @do4.scan(period=6, use_scan_field=True)
+    async def do4(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.do4.write(self.client.read("DO", 4))
+
+    do5 = pvproperty(name="do5", doc="Digital output 5, can be 0 or 1", dtype=bool, record='bi')   
+    @do5.putter
+    async def do5(self, instance, value: bool):
+        self.client.write("DO", 5, value)
+    @do5.scan(period=6, use_scan_field=True)
+    async def do5(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.do5.write(self.client.read("DO", 5))
+
+    do6 = pvproperty(name="do6", doc="Digital output 6, can be 0 or 1", dtype=bool, record='bi')   
+    @do6.putter
+    async def do6(self, instance, value: bool):
+        self.client.write("DO", 6, value)
+    @do6.scan(period=6, use_scan_field=True)
+    async def do6(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.do6.write(self.client.read("DO", 6))
+
+    do7 = pvproperty(name="do7", doc="Digital output 7, can be 0 or 1", dtype=bool, record='bi')   
+    @do7.putter
+    async def do7(self, instance, value: bool):
+        self.client.write("DO", 7, value)
+    @do7.scan(period=6, use_scan_field=True)
+    async def do7(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.do7.write(self.client.read("DO", 7))
+
+    dio0 = pvproperty(name="dio0", doc="Bidirectional digital in/out pin 0", dtype=bool, record='bi')   
+    @dio0.putter
+    async def dio0(self, instance, value: bool):
+        self.client.write("DIO", 0, value)
+    @dio0.scan(period=6, use_scan_field=True)
+    async def dio0(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.dio0.write(self.client.read("DIO", 0))
+
+    dio1 = pvproperty(name="dio1", doc="Bidirectional digital in/out pin 1", dtype=bool, record='bi')   
+    @dio1.putter
+    async def dio1(self, instance, value: bool):
+        self.client.write("DIO", 1, value)
+    @dio1.scan(period=6, use_scan_field=True)
+    async def dio1(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.dio1.write(self.client.read("DIO", 1))
+
+    dio2 = pvproperty(name="dio2", doc="Bidirectional digital in/out pin 2", dtype=bool, record='bi')   
+    @dio2.putter
+    async def dio2(self, instance, value: bool):
+        self.client.write("DIO", 2, value)
+    @dio2.scan(period=6, use_scan_field=True)
+    async def dio2(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.dio2.write(self.client.read("DIO", 2))
+
+    dio3 = pvproperty(name="dio3", doc="Bidirectional digital in/out pin 3", dtype=bool, record='bi')   
+    @dio3.putter
+    async def dio3(self, instance, value: bool):
+        self.client.write("DIO", 3, value)
+    @dio3.scan(period=6, use_scan_field=True)
+    async def dio3(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.dio3.write(self.client.read("DIO", 3))
+
+    dio4 = pvproperty(name="dio4", doc="Bidirectional digital in/out pin 4", dtype=bool, record='bi')   
+    @dio4.putter
+    async def dio4(self, instance, value: bool):
+        self.client.write("DIO", 4, value)
+    @dio4.scan(period=6, use_scan_field=True)
+    async def dio4(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.dio4.write(self.client.read("DIO", 4))
+
+    dio5 = pvproperty(name="dio5", doc="Bidirectional digital in/out pin 5", dtype=bool, record='bi')   
+    @dio5.putter
+    async def dio5(self, instance, value: bool):
+        self.client.write("DIO", 5, value)
+    @dio5.scan(period=6, use_scan_field=True)
+    async def dio5(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.dio5.write(self.client.read("DIO", 5))
+
+    dio6 = pvproperty(name="dio6", doc="Bidirectional digital in/out pin 6", dtype=bool, record='bi')   
+    @dio6.putter
+    async def dio6(self, instance, value: bool):
+        self.client.write("DIO", 6, value)
+    @dio6.scan(period=6, use_scan_field=True)
+    async def dio6(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.dio6.write(self.client.read("DIO", 6))
+
+    dio7 = pvproperty(name="dio7", doc="Bidirectional digital in/out pin 7", dtype=bool, record='bi')   
+    @dio7.putter
+    async def dio7(self, instance, value: bool):
+        self.client.write("DIO", 7, value)
+    @dio7.scan(period=6, use_scan_field=True)
+    async def dio7(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.dio7.write(self.client.read("DIO", 7))
+
+    di0 = pvproperty(name="di0", doc="Digital input pin 0", dtype=bool, record='bo')   
+    @di0.scan(period=6, use_scan_field=True)
+    async def di0(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.di0.write(self.client.read("DI", 0))
+
+    di1 = pvproperty(name="di1", doc="Digital input pin 1", dtype=bool, record='bo')   
+    @di1.scan(period=6, use_scan_field=True)
+    async def di1(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.di1.write(self.client.read("DI", 1))
+
+    di2 = pvproperty(name="di2", doc="Digital input pin 2", dtype=bool, record='bo')   
+    @di2.scan(period=6, use_scan_field=True)
+    async def di2(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.di2.write(self.client.read("DI", 2))
+
+    di3 = pvproperty(name="di3", doc="Digital input pin 3", dtype=bool, record='bo')   
+    @di3.scan(period=6, use_scan_field=True)
+    async def di3(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.di3.write(self.client.read("DI", 3))
+
+    di4 = pvproperty(name="di4", doc="Digital input pin 4", dtype=bool, record='bo')   
+    @di4.scan(period=6, use_scan_field=True)
+    async def di4(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.di4.write(self.client.read("DI", 4))
+
+    di5 = pvproperty(name="di5", doc="Digital input pin 5", dtype=bool, record='bo')   
+    @di5.scan(period=6, use_scan_field=True)
+    async def di5(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.di5.write(self.client.read("DI", 5))
+
+    di6 = pvproperty(name="di6", doc="Digital input pin 6", dtype=bool, record='bo')   
+    @di6.scan(period=6, use_scan_field=True)
+    async def di6(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.di6.write(self.client.read("DI", 6))
+
+    di7 = pvproperty(name="di7", doc="Digital input pin 7", dtype=bool, record='bo')   
+    @di7.scan(period=6, use_scan_field=True)
+    async def di7(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
+        await self.di7.write(self.client.read("DI", 7))
+
 
     # # bidirectional digital pins (input/output) ("DIO")
     # dio0 = pvproperty(name="dio0", doc="Digital i/o 0, can be 0 or 1", dtype=bool, record='bi')   
