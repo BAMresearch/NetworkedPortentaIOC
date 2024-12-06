@@ -47,7 +47,7 @@ class PortentaClient:
         if isinstance(value, str):
             value = 1 if value.lower() in {'on', '1', 'true'} else 0
         message = f"SET {bus} {pin} {value}\n"
-        logging.debug(f"Writing message: {message}")
+        logger.debug(f"Writing message: {message}")
         with self._connect() as sock:
             sock.sendall(message.encode('utf-8'))
             response = sock.recv(1024).decode('utf-8')
@@ -238,7 +238,7 @@ class PortentaIOC(PVGroup):
     async def di7(self, instance: ChannelData, async_lib: AsyncLibraryLayer):
         await self.di7.write(self.client.read("DI", 7))
 
-    ao0 = pvproperty(name="ao0", doc="Analog output 0, can be 0-10V", dtype=float, record='ai')
+    ao0 = pvproperty(name="ao0", doc="Analog output 0, can be 0-10V", dtype=float, record='ao')
     @ao0.putter
     async def ao0(self, instance, value: float):
         self.client.write("AO", 0, value)
