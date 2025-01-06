@@ -34,7 +34,16 @@ class PortentaClient:
 
     def _connect(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((self.host, self.port))
+        sock.settimeout(2) 
+        for retries in range(4):
+            try: 
+                sock.connect((self.host, self.port))
+                break
+            except TimeoutError:
+                print(f'TimeoutError when trying to connect to Arduino. Retrying {retries}/3 times')
+                if retries ==3:
+                    raise TimeoutError
+
         return sock
 
     def read(self, bus: str, pin: int) -> float:
